@@ -239,32 +239,18 @@
     filter = input.value.toUpperCase();
     ul = document.getElementById("list");
     li = ul.getElementsByTagName('li');
-    // Create an empty array to store search results
-    var searchResults = [];
     for (i = 0; i < li.length; i++) {
       a = li[i].getElementsByTagName("a")[0];
       txtValue = a.textContent || a.innerText;
       // Check if the item is searchable
       if (li[i].getAttribute('data-searchable') !== 'false') {
+        // If the search filter matches, display the item
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          // Store search results in the array
-          searchResults.push(li[i].outerHTML);
+          li[i].style.display = "";
         } else {
+          // Otherwise, hide the item
           li[i].style.display = "none";
         }
-      } else {
-        // Non-searchable items should remain visible
-        li[i].style.display = "";
-      }
-    }
-    // Clear the current list
-    ul.innerHTML = "";
-    // Append search results to the list
-    ul.innerHTML = searchResults.join('');
-    // Reset search if text is deleted
-    if (filter === "") {
-      for (i = 0; i < li.length; i++) {
-        li[i].style.display = "";
       }
     }
   }
