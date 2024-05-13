@@ -71,11 +71,11 @@
     </div>
 
     <div id="Home" class="tabcontent">
-      <ul id='list-home'>
-        <li class="animals no-filter"><a style="color: lime;">Green = Gamehub</a></li>
-        <li class="animals no-filter"><a style="color: red;">Red = Broken Repository</a></li>
-        <li class="animals no-filter"><a style="color: blue;">Blue = Repository</a></li>
-        <li class="animals no-filter"><a style="color: black;"></a></li>
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: black;"></a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/cluster-rush.html">Cluster Rush</a></li> 
         <li class="animals"><a style="color: blue;"href="/html5games/retro-bowl.html">Retro Bowl</a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/retro-c.html">Retro Bowl College</a></li> 
@@ -169,11 +169,11 @@
     </div>
 
     <div id="News" class="tabcontent">
-      <ul id='list-news'>
-        <li class="animals no-filter"><a style="color: lime;">Green = Gamehub</a></li>
-        <li class="animals no-filter"><a style="color: red;">Red = Broken Repository</a></li>
-        <li class="animals no-filter"><a style="color: blue;">Blue = Repository</a></li>
-        <li class="animals no-filter"><a style="color: black;"></a></li>
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: black;"></a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/retro-bowl.html">Retro Bowl</a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/retro-c.html">Retro Bowl College</a></li>
         <li class="animals"><a style="color: lime;" href="/html5games/gamehub/edgesurf.html">Edge Surf</a></li>
@@ -185,21 +185,21 @@
     </div>
 
     <div id="Contact" class="tabcontent">
-      <ul id='list-contact'>
-        <li class="animals no-filter"><a style="color: lime;">Green = Gamehub</a></li>
-        <li class="animals no-filter"><a style="color: red;">Red = Broken Repository</a></li>
-        <li class="animals no-filter"><a style="color: blue;">Blue = Repository</a></li>
-        <li class="animals no-filter"><a style="color: black;"></a></li>
+      <ul id="list">
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: black;"></a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/getaway.html">Getaway Shootout</a></li>
       </ul>
     </div>
 
     <div id="About" class="tabcontent">
-      <ul id='list-about'>
-        <li class="animals no-filter"><a style="color: lime;">Green = Gamehub</a></li>
-        <li class="animals no-filter"><a style="color: red;">Red = Broken Repository</a></li>
-        <li class="animals no-filter"><a style="color: blue;">Blue = Repository</a></li>
-        <li class="animals no-filter"><a style="color: black;"></a></li>
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: black;"></a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/drive-mad.html">Drive Mad</a></li> 
         <li class="animals"><a style="color: blue;" href="/html5games/monster.html">Monster Tracks</a></li>
         <li class="animals"><a style="color: blue;" href="/html5games/cluster-rush.html">Cluster Rush</a></li>
@@ -209,10 +209,15 @@
         <li class="animals"><a style="color: blue;" href="html5games/happywheels.html">Happy Wheels</a></li>
       </ul>
     </div>
-
   </div>
 
   <script>
+    // Check if passcodeEntered is true in localStorage
+    var passcodeEntered = localStorage.getItem('passcodeEntered');
+    if (passcodeEntered) {
+      document.getElementById('content').style.display = 'block';
+    }
+
     function openPage(pageName, elmnt, color) {
       var i, tabcontent, tablinks;
       tabcontent = document.getElementsByClassName("tabcontent");
@@ -227,37 +232,27 @@
       elmnt.style.backgroundColor = color;
     }
 
+    // Function to search games
+    function search_animal() {
+      var input, filter, ul, li, a, i, txtValue;
+      input = document.getElementById('searchbar');
+      filter = input.value.toUpperCase();
+      ul = document.getElementById("list");
+      li = ul.getElementsByTagName('li');
+      for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        // Check if the item is searchable
+        if (li[i].getAttribute('data-searchable') !== 'false' && txtValue.toUpperCase().indexOf(filter) > -1) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+      }
+    }
+
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
-   
-    function search_animal() {
-    // Declare variables
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('searchbar');
-    filter = input.value.toUpperCase();
-    // Update to target the correct list based on the active tab
-    ul = document.querySelector(".tabcontent[style='display: block;'] ul");
-    li = ul.getElementsByTagName('li');
-
-    // Loop through all list items
-    for (i = 0; i < li.length; i++) {
-        // Check if the list item has the "no-filter" class
-        if (!li[i].classList.contains('no-filter')) {
-            // Get the anchor tag inside the list item
-            a = li[i].getElementsByTagName("a")[0];
-            if (a) {
-                txtValue = a.textContent || a.innerText;
-                // Check if the text content of the anchor tag matches the filter
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
-                }
-            }
-        }
-    }
-}
-</script>
-
+  </script>
 </body>
 </html>
