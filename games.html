@@ -245,17 +245,28 @@
       a = li[i].getElementsByTagName("a")[0];
       txtValue = a.textContent || a.innerText;
       // Check if the item is searchable
-      if (li[i].getAttribute('data-searchable') !== 'false' && txtValue.toUpperCase().indexOf(filter) > -1) {
-        // Store search results in the array
-        searchResults.push(li[i].outerHTML);
+      if (li[i].getAttribute('data-searchable') !== 'false') {
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          // Store search results in the array
+          searchResults.push(li[i].outerHTML);
+        } else {
+          li[i].style.display = "none";
+        }
       } else {
-        li[i].style.display = "none";
+        // Non-searchable items should remain visible
+        li[i].style.display = "";
       }
     }
     // Clear the current list
     ul.innerHTML = "";
     // Append search results to the list
     ul.innerHTML = searchResults.join('');
+    // Reset search if text is deleted
+    if (filter === "") {
+      for (i = 0; i < li.length; i++) {
+        li[i].style.display = "";
+      }
+    }
   }
 
     // Get the element with id="defaultOpen" and click on it
