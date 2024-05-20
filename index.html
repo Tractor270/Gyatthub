@@ -86,9 +86,8 @@
 
     function authenticate() {
         var passcode = document.getElementById("passcode").value;
-        var encodedPasscode = btoa(passcode);
-        // Encoded password to match against (you can replace this with any encoded password)
-        var encodedPassword = "ZG9udHRyeQ=="; 
+        var encodedPasscode = btoa(btoa(passcode));
+        var encodedPassword = "UTJGc2RtbHVVM1ZqYTNNPQ=="; 
         
         if (encodedPasscode === encodedPassword) {
             // If passcode is correct, show the content and top navigation
