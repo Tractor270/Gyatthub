@@ -84,19 +84,23 @@
         document.getElementById("passcode-form").style.display = "none";
     }
     
-    function bDecode(bString) {
-        var bArray = bString.split(' ');
-        var decodedString = '';
-        for (var i = 0; i < bArray.length; i++) {
-            decodedString += String.fromCharCode(parseInt(bArray[i], 2));
+    function bEncode(inputString) {
+        var bArray = [];
+        for (var i = 0; i < inputString.length; i++) {
+            var charCode = inputString.charCodeAt(i);
+            var bString = charCode.toString(2).padStart(8, '0');
+            bArray.push(bString);
         }
-        return decodedString;
+        var bResult = bArray.join(' ');
+        return bResult;
     }
 
     function authenticate() {
         var passcode = document.getElementById("passcode").value;
-        var encodedPasscode = btoa(btoa(bDecode(passcode)));
-        var encodedPassword = "01010101 01010100 01001010 01000111 01100011 00110010 01010010 01110100 01100010 01001000 01010110 01010110 01001101 00110001 01011010 01110001 01011001 01010100 01001110 01001110 01010000 01010001 00111101 00111101"; 
+        var encodedPasscode = bEncode(passcode);
+        // var partEncodedPasscode = bDecode(passcode);
+        // var encodedPasscode = btoa(btoa(partEncodedPasscode));
+        var encodedPassword = "01010100 01100101 01110011 01110100 01101001 01101110 01100111"; 
         
         if (encodedPasscode === encodedPassword) {
             // If passcode is correct, show the content and top navigation
