@@ -97,10 +97,8 @@
 
     function authenticate() {
         var passcode = document.getElementById("passcode").value;
-        var encodedPasscode = bEncode(passcode);
-        // var partEncodedPasscode = bDecode(passcode);
-        // var encodedPasscode = btoa(btoa(partEncodedPasscode));
-        var encodedPassword = "01010100 01100101 01110011 01110100 01101001 01101110 01100111"; 
+        var encodedPasscode = btoa(bEncode(btoa(passcode)));
+        var encodedPassword = "MDEwMTAwMDEgMDAxMTAwMTAgMDEwMDAxMTAgMDExMTAwMTEgMDExMDAxMDAgMDExMDExMDEgMDExMDExMDAgMDExMTAxMDEgMDEwMTAxMDEgMDExMDExMDEgMDAxMTEwMDEgMDExMTEwMTAgMDExMDAwMTEgMDAxMTAwMTAgMDExMDExMDAgMDEwMTAxMDAgMDExMDAxMDAgMDEwMTAxMTEgMDEwMDExMTAgMDExMTAwMTAgMDExMDAwMTEgMDExMTAxMTEgMDAxMTExMDEgMDAxMTExMDE="; 
         
         if (encodedPasscode === encodedPassword) {
             // If passcode is correct, show the content and top navigation
