@@ -71,16 +71,12 @@
 </div>
 
 <script>
-    // Hide the navigation bar initially
     document.getElementById("myTopnav").style.display = "none";
 
-    // Check if passcode has been entered previously
     var passcodeEntered = localStorage.getItem("passcodeEntered");
     if (passcodeEntered === "true") {
-        // Passcode has been entered previously, show the content and top navigation
         document.getElementById("content").style.display = "block";
         document.getElementById("myTopnav").style.display = "block";
-        // Hide the passcode form
         document.getElementById("passcode-form").style.display = "none";
     }
     
@@ -95,32 +91,26 @@
         return bResult;
     }
 
-    function authenticate() {
+    async function authenticate() {
         var passcode = document.getElementById("passcode").value;
         var encodedPasscode = btoa(bEncode(btoa(passcode)));
-        var encodedPassword = "MDEwMTAwMDEgMDAxMTAwMTAgMDEwMDAxMTAgMDExMTAwMTEgMDExMDAxMDAgMDExMDExMDEgMDExMDExMDAgMDExMTAxMDEgMDEwMTAxMDEgMDExMDExMDEgMDAxMTEwMDEgMDExMTEwMTAgMDExMDAwMTEgMDAxMTAwMTAgMDExMDExMDAgMDEwMTAxMDAgMDExMDAxMDAgMDEwMTAxMTEgMDEwMDExMTAgMDExMTAwMTAgMDExMDAwMTEgMDExMTAxMTEgMDAxMTExMDEgMDAxMTExMDE="; 
+        let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
+        let encodedPassword = await response.text();
         
-        if (encodedPasscode === encodedPassword) {
-            // If passcode is correct, show the content and top navigation
+        if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            // Store that passcode has been entered
             localStorage.setItem("passcodeEntered", "true");
-            // Hide the passcode form
             document.getElementById("passcode-form").style.display = "none";
         } else {
-            // If passcode is incorrect, show an error message
             alert("Incorrect passcode. Please try again.");
         }
     }
 
-    // Cache the authentication status throughout the website
     window.addEventListener('storage', function(event) {
         if (event.key === "passcodeEntered" && event.newValue === "true") {
-            // Passcode has been entered, show the content and top navigation
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            // Hide the passcode form if it's present
             document.getElementById("passcode-form").style.display = "none";
         }
     });
