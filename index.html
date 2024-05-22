@@ -79,23 +79,28 @@
         document.getElementById("myTopnav").style.display = "block";
         document.getElementById("passcode-form").style.display = "none";
     }
-    
-    function bEncode(inputString) {
-        var bArray = [];
-        for (var i = 0; i < inputString.length; i++) {
-            var charCode = inputString.charCodeAt(i);
-            var bString = charCode.toString(2).padStart(8, '0');
-            bArray.push(bString);
+    function hEncode(str) {
+        let hStr = '';
+        for (let i = 0; i < str.length; i++) {
+            hStr += str.charCodeAt(i).toString(16);
         }
-        var bResult = bArray.join(' ');
-        return bResult;
+        return hStr;
+    }
+
+    function eEF(str) {
+        let result = '';
+        for (let i = 4; i < str.length; i += 5) {
+            result += str[i];
+        }
+        return result;
     }
 
     async function authenticate() {
         var passcode = document.getElementById("passcode").value;
-        var encodedPasscode = btoa(bEncode(btoa(passcode)));
+        var encodedPasscode = btoa(hEncode(passcode));
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
-        let encodedPassword = await response.text();
+        let fullResponse = await response.text();
+        let encodedPassword = eEF(fullResponse)
         
         if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
