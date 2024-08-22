@@ -56,6 +56,7 @@
         <h2>Enter Passcode:</h2>
         <input type="password" id="passcode" class="passcode-input" onkeydown="if(event.keyCode==13){authenticate()}">
         <button onclick="authenticate()">Submit</button>
+        <p id="lockout-message" style="color: red; display: none;">Too many failed attempts. Please try again in 30 minutes.</p>
     </div>
 </div>
 
@@ -79,6 +80,7 @@
         document.getElementById("myTopnav").style.display = "block";
         document.getElementById("passcode-form").style.display = "none";
     }
+
     function hEncode(str) {
         let hStr = '';
         for (let i = 0; i < str.length; i++) {
@@ -96,19 +98,42 @@
     }
 
     async function authenticate() {
-        var passcode = document.getElementById("passcode").value;
-        var encodedPasscode = btoa(hEncode(passcode));
+        const maxAttempts = 3;
+        const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        const passcode = document.getElementById("passcode").value;
+        const encodedPasscode = btoa(hEncode(passcode));
+
+        let attempts = parseInt(localStorage.getItem("attempts") || "0");
+        const lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
+
+        if (Date.now() < lockoutTime) {
+            document.getElementById("lockout-message").style.display = "block";
+            return;
+        } else {
+            document.getElementById("lockout-message").style.display = "none";
+            localStorage.removeItem("lockoutTime");
+        }
+
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
-        let encodedPassword = eEF(fullResponse)
-        
+        let encodedPassword = eEF(fullResponse);
+
         if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
             localStorage.setItem("passcodeEntered", "true");
             document.getElementById("passcode-form").style.display = "none";
+            localStorage.removeItem("attempts");
         } else {
-            alert("Incorrect passcode. Please try again.");
+            attempts++;
+            localStorage.setItem("attempts", attempts);
+            if (attempts >= maxAttempts) {
+                localStorage.setItem("lockoutTime", Date.now() + lockoutDuration);
+                document.getElementById("lockout-message").style.display = "block";
+            } else {
+                alert("Incorrect passcode. Please try again.");
+            }
         }
     }
 
