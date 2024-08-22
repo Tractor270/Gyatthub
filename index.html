@@ -56,7 +56,9 @@
         <h2>Enter Passcode:</h2>
         <input type="password" id="passcode" class="passcode-input" onkeydown="if(event.keyCode==13){authenticate()}">
         <button onclick="authenticate()">Submit</button>
-        <p id="lockout-message" style="color: red; display: none;">Too many failed attempts. Please try again in 30 minutes.</p>
+        <p id="lockout-message" style="color: red; display: none;">
+            Too many failed attempts. Please try again in <span id="countdown-timer">30 minutes</span>.
+        </p>
     </div>
 </div>
 
@@ -105,10 +107,26 @@
         const encodedPasscode = btoa(hEncode(passcode));
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
-        const lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
+        let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
+
+        function updateCountdown() {
+            const now = Date.now();
+            const timeLeft = lockoutTime - now;
+            if (timeLeft > 0) {
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                document.getElementById("countdown-timer").textContent = `${minutes} minute(s) and ${seconds} second(s)`;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                document.getElementById("lockout-message").style.display = "none";
+                localStorage.removeItem("lockoutTime");
+                localStorage.removeItem("attempts");
+            }
+        }
 
         if (Date.now() < lockoutTime) {
             document.getElementById("lockout-message").style.display = "block";
+            updateCountdown();
             return;
         } else {
             document.getElementById("lockout-message").style.display = "none";
@@ -129,8 +147,10 @@
             attempts++;
             localStorage.setItem("attempts", attempts);
             if (attempts >= maxAttempts) {
-                localStorage.setItem("lockoutTime", Date.now() + lockoutDuration);
+                lockoutTime = Date.now() + lockoutDuration;
+                localStorage.setItem("lockoutTime", lockoutTime);
                 document.getElementById("lockout-message").style.display = "block";
+                updateCountdown();
             } else {
                 alert("Incorrect passcode. Please try again.");
             }
