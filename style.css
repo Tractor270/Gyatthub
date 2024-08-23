@@ -1,3 +1,4 @@
+/* General Reset */
 * {
   box-sizing: border-box;
 }
@@ -5,14 +6,13 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2051.png');
+  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2051.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; /* Ensures the body takes up the full viewport height */
-  color: blue; /* Default text color */
 }
 
+/* Navigation Bar */
 .topnav {
   overflow: hidden;
   background-color: black;
@@ -127,6 +127,13 @@ body {
 
 li {
   text-decoration: none;
+}
+
+/* Remove default list styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 a {
