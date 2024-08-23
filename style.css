@@ -107,7 +107,11 @@ body {
   border-color: blue!important;
 }
 body{
-  background-color: black;
+  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/34441b671a858c09b3ae25125fa234b036305e5f/IMG_2051.jpeg
+'); /* Replace with your GitHub image URL */
+  background-size: cover; /* Ensure the image covers the entire background */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
   
 }
 #hiddenList{
