@@ -46,7 +46,14 @@
 
     // Function to update play count display
     function updatePlayCount() {
-      var countText = playCount === 1 ? "Played 1 time." : "Played " + playCount + " times.";
+      let countText;
+      if (playCount === 0) {
+        countText = "You have not played this game yet.";
+      } else if (playCount === 1) {
+        countText = "You have played this game 1 time.";
+      } else {
+        countText = "You have played this game " + playCount + " times.";
+      }
       return `<div id='play-count' style='font-size: 14px; text-align: center; margin-top: 5px;'>${countText}</div>`;
     }
 
