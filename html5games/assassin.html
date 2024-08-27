@@ -21,20 +21,29 @@
       width: 100%;
       height: 100vh;
     }
+    #play-count {
+      text-align: center;
+      font-family: 'arial';
+      font-size: 18px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="topnav">
     <a href="/index.html">Home</a>
     <a class="active" href="/games.html">Games</a>
-    <a href="/tv.html">TV</a>
     <a href="/proxy.html">Proxys</a>
     <a href="/other.html">Other</a>
   </div>
  
   <iframe frameborder="0" id="gameFrame"></iframe>
+  <div id="play-count"></div>
 
   <script>
+    // Unique identifier for this game page
+    var pageID = '/3kh0/projects/tacticalassasin2'; // Change this for each different game
+
     // Check if the localStorage variable 'passcodeEntered' is set to true
     var passcodeEntered = localStorage.getItem('passcodeEntered');
 
@@ -50,7 +59,32 @@
           display: ${passcodeEntered === 'true' ? 'block' : 'none'};
         }
       </style>
-      <a id='play' href='/3kh0/projects/tacticalassasin2/'><h1>PLAY</h1></a>`;
+      <a id='play' href='/${pageID}'><h1>PLAY</h1></a>`;
+
+    // Initialize play counter using the unique pageID
+    var playCount = localStorage.getItem('playCount_' + pageID) || 0;
+    playCount = parseInt(playCount);
+
+    // Function to update play count display
+    function updatePlayCount() {
+      var countText = playCount === 1 ? "Played 1 time." : "Played " + playCount + " times.";
+      document.getElementById('play-count').innerText = countText;
+    }
+
+    // Add event listener for the play button
+    document.getElementById('gameFrame').addEventListener('load', function() {
+      var playButton = document.getElementById('gameFrame').contentWindow.document.getElementById('play');
+      
+      if (playButton) {
+        playButton.addEventListener('click', function() {
+          playCount += 1;
+          localStorage.setItem('playCount_' + pageID, playCount);
+          updatePlayCount();
+        });
+      }
+
+      updatePlayCount(); // Update the count display on page load
+    });
   </script>
 </body>
 </html>
