@@ -27,30 +27,66 @@
   <div class="topnav">
     <a href="/index.html">Home</a>
     <a class="active" href="/games.html">Games</a>
-    <a href="/tv.html">TV</a>
     <a href="/proxy.html">Proxys</a>
     <a href="/other.html">Other</a>
   </div>
-
-  <section id="gameContent"></section>
+ 
+  <iframe frameborder="0" id="gameFrame"></iframe>
 
   <script>
+    // Unique identifier for this game page
+    var pageID = 'mcred2024.github.io/sandboxels'; // Include the full URL here
+
     // Check if the localStorage variable 'passcodeEntered' is set to true
     var passcodeEntered = localStorage.getItem('passcodeEntered');
 
-    // Set the content of the game based on passcodeEntered value
-    document.getElementById('gameContent').innerHTML = `
+    // Initialize play counter using the unique pageID
+    var playCount = localStorage.getItem('playCount_' + pageID) || 0;
+    playCount = parseInt(playCount);
+
+    // Function to update play count display
+    function updatePlayCount() {
+      let countText;
+      if (playCount === 0) {
+        countText = "You have not played this game yet.";
+      } else if (playCount === 1) {
+        countText = "You have played this game 1 time.";
+      } else {
+        countText = "You have played this game " + playCount + " times.";
+      }
+      return `<div id='play-count' style='font-size: 14px; color: blue; text-align: center; margin-top: 5px;'>${countText}</div>`;
+    }
+
+    // Set the srcdoc attribute of the iframe based on passcodeEntered value
+    document.getElementById('gameFrame').srcdoc = `
       <style>
         #play {
           color: blue;
           text-align: center;
           text-decoration: none;
           font-family: 'arial';
-          font-size: 27px;
+          font-size: 20px;
           display: ${passcodeEntered === 'true' ? 'block' : 'none'};
+          margin-bottom: 10px;
         }
       </style>
-      <a id='play' href='/sandboxels'><h1>PLAY</h1></a>`;
+      <div style='text-align: center;'>
+        <a id='play' href='https://${pageID}'><h1>PLAY</h1></a>
+        ${updatePlayCount()}
+      </div>`;
+
+    // Add event listener for the play button
+    document.getElementById('gameFrame').addEventListener('load', function() {
+      var playButton = document.getElementById('gameFrame').contentWindow.document.getElementById('play');
+      
+      if (playButton) {
+        playButton.addEventListener('click', function() {
+          playCount += 1;
+          localStorage.setItem('playCount_' + pageID, playCount);
+          document.getElementById('gameFrame').contentWindow.document.getElementById('play-count').innerHTML = updatePlayCount();
+        });
+      }
+    });
   </script>
 </body>
 </html>
