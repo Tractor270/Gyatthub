@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Iceman</title>
+  <link rel='stylesheet' href='game.css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/IMG_1486.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    #play-container {
+      width: 100vw;
+      height: 100%;
+      frameborder: 0;
+      border: 0;
+    }
+    section {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="/index.html">Home</a>
+    <a class="active" href="/games.html">Games</a>
+    <a href="/proxy.html">Proxys</a>
+    <a href="/other.html">Other</a>
+  </div>
+ 
+  <iframe frameborder="0" id="gameFrame"></iframe>
+
+  <script>
+    // Unique identifier for this game page
+    var pageID = 'scratch.mit.edu/projects/771964685/fullscreen/'; // Include the full URL here
+
+    // Check if the localStorage variable 'passcodeEntered' is set to true
+    var passcodeEntered = localStorage.getItem('passcodeEntered');
+
+    // Initialize play counter using the unique pageID
+    var playCount = localStorage.getItem('playCount_' + pageID) || 0;
+    playCount = parseInt(playCount);
+
+    // Function to update play count display
+    function updatePlayCount() {
+      let countText;
+      if (playCount === 0) {
+        countText = "You have not played this game yet.";
+      } else if (playCount === 1) {
+        countText = "You have played this game 1 time.";
+      } else {
+        countText = "You have played this game " + playCount + " times.";
+      }
+      return `<div id='play-count' style='font-size: 14px; color: blue; text-align: center; margin-top: 5px;'>${countText}</div>`;
+    }
+
+    // Set the srcdoc attribute of the iframe based on passcodeEntered value
+    document.getElementById('gameFrame').srcdoc = `
+      <style>
+        #play {
+          color: blue;
+          text-align: center;
+          text-decoration: none;
+          font-family: 'arial';
+          font-size: 20px;
+          display: ${passcodeEntered === 'true' ? 'block' : 'none'};
+          margin-bottom: 10px;
+        }
+      </style>
+      <div style='text-align: center;'>
+        <a id='play' href='https://${pageID}'><h1>PLAY</h1></a>
+        ${updatePlayCount()}
+      </div>`;
+
+    // Add event listener for the play button
+    document.getElementById('gameFrame').addEventListener('load', function() {
+      var playButton = document.getElementById('gameFrame').contentWindow.document.getElementById('play');
+      
+      if (playButton) {
+        playButton.addEventListener('click', function() {
+          playCount += 1;
+          localStorage.setItem('playCount_' + pageID, playCount);
+          document.getElementById('gameFrame').contentWindow.document.getElementById('play-count').innerHTML = updatePlayCount();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
