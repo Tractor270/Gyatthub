@@ -137,7 +137,7 @@
 
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
-        let encodedPassword = eEF(fullResponse);
+        let encodedPassword = eEF(eEF(fullResponse));
 
         if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
